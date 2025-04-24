@@ -95,8 +95,13 @@ nav{
   visibility: hidden;
 
   list-style-type: none;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.4s ease-in, visibility 0.4s ease-in;
 }
+
+#mainMenus li:hover ul{
+  background-color: rgba(255, 228, 196, 0.5);
+}
+
 
 #mainMenus li:hover > ul {
   opacity: 1;
@@ -121,9 +126,66 @@ nav{
 
 
 /* 2. 슬라이드 */
-#slide{
+#slideShow{
+  grid-area: slides;
 
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  position: relative;
 }
+
+#slides{
+  display: flex;
+  width: 100%;                /* 이미지 수만큼 배 */
+  height: 100%;
+
+  transition: transform 0.5s ease-in-out;
+  position: relative;
+}
+
+#slides a {
+  flex: 1 0 100%;             /* 한 이미지가 100% 차지 */
+}
+
+#slides a img{
+  width: 100%;
+  height: 100%;
+
+  border: black solid 1px;
+}
+
+#prev, #next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  z-index: 10;
+
+  background-color: rgba(0,0,0,0.4);
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#prev {
+  left: 10px;
+}
+
+#next {
+  right: 10px;
+}
+
+button:hover {
+  background-color: #222;
+  color: #fff;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
 
 /* 3. 콘텐츠 */
 #contents{
