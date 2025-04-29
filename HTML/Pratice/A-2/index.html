@@ -61,28 +61,67 @@
       <button id="next">&rang;</button>
     </div>
     <div id="contents">
-      <div id="announcement">
+      <div id="tabMenu">
+        <input type="radio" id="tab1" name="tabs" checked>
+        <label for="tab1">공지사항</label>
+        <input type="radio" id="tab2" name="tabs">
+        <label for="tab2">갤러리</label>
 
+        <div id="notice" class="tabContent">
+          <ul>
+            <li><a id="popupOpen" href="#"> 공지사항 1 </a></li>
+            <li><a href="#"> 공지사항 1 </a></li>
+            <li><a href="#"> 공지사항 1 </a></li>
+            <li><a href="#"> 공지사항 1 </a></li>
+          </ul>
+        </div>
+
+        <div id="tabMenuGallery" class="tabContent">
+          <img src="./img/5f97be04c37f7d13517c6c700da7c807_t.jpeg" alt="notice_image_1">
+          <img src="./img/5f97be04c37f7d13517c6c700da7c807_t.jpeg" alt="notice_image_2">
+          <img src="./img/5f97be04c37f7d13517c6c700da7c807_t.jpeg" alt="notice_image_3">
+        </div>
+
+        <div id="layerPopup" class="popup">
+          <div class="popup-content">
+            <h3>공지사항 제목</h3>
+            <p>여기에 팝업 공지사항의 내용을 넣어주세요.</p>
+            <button id="popupClose">닫기</button>
+          </div>
+        </div>
       </div>
       <div id="gallery">
-
+        <img src="./img/5f97be04c37f7d13517c6c700da7c807_t.jpeg" alt="gallery_image_1">
+        <img src="./img/5f97be04c37f7d13517c6c700da7c807_t.jpeg" alt="gallery_image_2">
+        <img src="./img/5f97be04c37f7d13517c6c700da7c807_t.jpeg" alt="gallery_image_3">
       </div>
       <div id="banner">
-
+        <h1><a href="#">그린 복지 재단</a></h1>
       </div>
     </div>
     <footer>
       <div class="logo">
-
+        <h1><a href="#">Green <br/>복지재단</a></h1>
       </div>
       <div id="copyRight">
-
-      </div>
+        <p>© 2025 JUST 쇼핑몰. All rights reserved. <br/>
+        Contact: support@justshop.co.kr | Tel: 02-1234-5678</p>
+        </div>
       <div id="familySite">
-
+        <div class="icons">
+          <a href="#"><img src="./img/sns_facebook.png" alt="sns_facebook"></a>
+          <a href="#"><img src="./img/sns_instagram.png" alt="sns_instagram"></a>
+          <a href="#"><img src="./img/sns_youtube.png" alt="sns_youtube"></a>
+        </div>
+        <select name="sitelist">
+          <option value="#">패밀리사이트1</option>
+          <option value="#">패밀리사이트2</option>
+          <option value="#">패밀리사이트3</option>
+        </select>
       </div>
     </footer>
   </div>
+  <script src="./script/subMenu.js"></script>
   <script src="./script/slides.js"></script>
 </body>
 </html>
