@@ -14,10 +14,10 @@
     "contents"
     "footer";
   grid-template-rows: 100px 300px 200px 100px;
+  position: relative;
 
   width: 1200px;
   margin: 0 auto;
-
 }
 
 /* 1. 헤더 */
@@ -30,8 +30,6 @@ header{
 
   width: 100%;
   height: 100%;
-
-
 }
 
 /* 1-1. 로고 */
@@ -77,9 +75,12 @@ header nav{
   padding: 20px;
   position: relative;
 
+  width: 150px;
+
   background-color: blanchedalmond;
 
   border: 1px solid black;
+  text-align: center;
 }
 
 #mainMenu li:last-child{
@@ -99,15 +100,92 @@ header nav{
   border-bottom: none;
 }
 
-#mainMenu li:hover .subMenu{
-  display: block;
+.subMenu{
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 2s ease;
+  pointer-events: none;
+  background-color: blanchedalmond;
+}
+
+.subMenu.visible{
+  /* display: flex; */ /*해당 속성 존재시 display:none에서 flex로 즉시 전환되며 애니메이션 불가 */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.subMenuWrap{
+  width: 1200px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: flex-end;
+  
+  flex-direction: row;
+}
+
+.subMenuWrap ul{
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.subMenuWrap ul:last-child{
+  margin-right: 50px;
+}
+
+.subMenuWrap ul li{
+  width: 150px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.subMenuWrap ul li:hover{
+  background-color: burlywood;
+  transition: background-color 1s ease;
+}
+
+.subMenuWrap ul li a{
+  text-decoration: none;
 }
 
 
-
-
 /* 2. 슬라이드 */
+.slide-viewport {
+  width: 1200px;     /* ✅ 명시적으로 지정 */
+  height: 300px;
+  overflow: hidden;  /* ✅ 여기서 잘라냄 */
+  position: relative;
+}
 
+#slides{
+  grid-area: slides;
+  width: 100%;
+  height: 100%;
+
+  transition: transform 0.5s ease-in-out;
+
+  display: flex;
+  flex-direction: row;
+}
+
+#slides a{
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#slides a img{
+  width: 100%;
+  height: 100%;
+
+  border: 1px solid gray;
+}
 
 
 /* 3. 콘텐츠 */
