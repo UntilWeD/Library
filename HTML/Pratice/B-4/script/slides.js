@@ -1,4 +1,4 @@
-const slides = document.querySelector("#slides a");
+const slides = document.querySelector("#slides");
 const totalSolides = document.querySelectorAll("#slides > a").length;
 
 let current = 0;
