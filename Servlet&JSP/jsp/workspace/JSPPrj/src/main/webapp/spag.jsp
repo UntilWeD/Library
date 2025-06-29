@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	int num = 0;
-	String num_ = request.getParameter("n");
-	if(num_ != null && !num_.equals(""))
-		num = Integer.parseInt(num_);
+pageContext.setAttribute("result", "hello");
 %>
+<!--  ------------------------------------------------------- -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,10 +11,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%if(num%2 != 0){%>
-	홀수입니다.
-	<% } else {%>
-	짝수입니다.
-	<%} %>
+
+	<%=request.getAttribute("result") %> 입니다.
+	${requestScope.result} <br>
+	${names[1]} <br>
+	${notice.title} <br>
+	${result} <br>
+	${param.n/2} <br>
+	${header.accept} <br> 
 </body>
 </html>
