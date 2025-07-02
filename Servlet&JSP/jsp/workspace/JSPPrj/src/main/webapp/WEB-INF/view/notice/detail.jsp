@@ -177,7 +177,7 @@
 										<a href="${fileName}" style="${style}" >${fn:toUpperCase(fileName)}</a>
 										<c:if test="${!st.last}">
 											/
-										</c:if>
+										</c:if>	
 										
 									</c:forTokens>
 									</td>
