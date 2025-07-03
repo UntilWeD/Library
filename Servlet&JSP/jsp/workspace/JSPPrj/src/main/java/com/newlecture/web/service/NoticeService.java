@@ -5,28 +5,92 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
 	
+	public int removeNoticeAll(int[] ids) {
+		
+		return 0;
+	}
 	
-	public List<Notice> getNoticeList(){
+	public int pubNoticeAll(int[] ids) {
+		
+		return 0;
+	}
+	
+	public int insertNotice(Notice notice) {
+		int result = 0;
+		
+		
+		String sql = "INSERT INTO NOTICE(TITLE, CONTENT, WRITER_ID, PUB) VALUES (?, ?, ?, ?)";
+		
+		String url = "jdbc:mysql://localhost:3306/newlec?useSSL=false&serverTimezone=UTC";
+		String dbId = "root";
+		String dbPassword = "1234";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection(url, "root", "1234");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, notice.getTitle());
+			st.setString(2, notice.getContent());
+			st.setString(3, notice.getWriterId());
+			st.setBoolean(4, notice.getPub());
+			
+			result = st.executeUpdate();
+
+			
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	
+	public int deleteNotice(int id) {
+		
+		
+		return 0;
+	}
+	
+	public int updateNotice(Notice notice) {
+		return 0;
+	}
+	
+	public List<NoticeView> getNoticeNewestList(){
 		
 		return getNoticeList("title", "", 1);
 	}
 	
-	public List<Notice> getNoticeList(int page){
+	
+	
+	public List<NoticeView> getNoticeList(){
+		
+		return getNoticeList("title", "", 1);
+	}
+	
+	public List<NoticeView> getNoticeList(int page){
 		
 		return getNoticeList("title", "", page);
 		
 	}
 	
-	public List<Notice> getNoticeList(String field, String query, int page){
-		List<Notice> list = new ArrayList<>();
+	public List<NoticeView> getNoticeList(String field, String query, int page){
+		List<NoticeView> list = new ArrayList<>();
 		
 		String url = "jdbc:mysql://localhost:3306/newlec?useSSL=false&serverTimezone=UTC";
 		String dbId = "root";
@@ -34,8 +98,8 @@ public class NoticeService {
 		
 		String sql =     
 				"SELECT * FROM ( " +
-			    "   SELECT ROW_NUMBER() OVER (ORDER BY regdate DESC) AS rownum, notice.* " +
-			    "   FROM notice " +
+			    "   SELECT ROW_NUMBER() OVER (ORDER BY regdate DESC) AS rownum, v.* " +
+			    "   FROM notice_view v " +
 			    "   WHERE " + field + " LIKE ? " +
 			    ") AS ranked " +
 			    "WHERE rownum BETWEEN ? AND ?";
@@ -58,16 +122,19 @@ public class NoticeService {
 				String writerId =rs.getString("WRITER_ID");
 				String hit =rs.getString("HIT");
 				String files =rs.getString("FILES");
-				String content =rs.getString("CONTENT"); 
+				int cmtCount = rs.getInt("CMT_COUNT");
+				Boolean pub = rs.getBoolean("PUB");
+					
 				
-				Notice notice = new Notice(
+				NoticeView notice = new NoticeView(
 							id,
 							title,
 							writerId,
 							regDate,
 							hit,
 							files,
-							content
+							pub,
+							cmtCount
 				);
 				list.add(notice);
 			}
@@ -172,6 +239,7 @@ public class NoticeService {
 				String hit =rs.getString("HIT");
 				String files =rs.getString("FILES");
 				String content =rs.getString("CONTENT"); 
+				Boolean pub = rs.getBoolean("PUB");
 				
 				notice = new Notice(
 						nid,
@@ -180,7 +248,8 @@ public class NoticeService {
 						regDate,
 						hit,
 						files,
-						content
+						content,
+						pub
 				);
 			}
 			
@@ -226,6 +295,7 @@ public class NoticeService {
 				String hit =rs.getString("HIT");
 				String files =rs.getString("FILES");
 				String content =rs.getString("CONTENT"); 
+				Boolean pub = rs.getBoolean("PUB");
 				
 				notice = new Notice(
 						nid,
@@ -234,7 +304,8 @@ public class NoticeService {
 						regDate,
 						hit,
 						files,
-						content
+						content,
+						pub
 				);
 			}
 			
@@ -279,6 +350,7 @@ public class NoticeService {
 				String hit =rs.getString("HIT");
 				String files =rs.getString("FILES");
 				String content =rs.getString("CONTENT"); 
+				Boolean pub = rs.getBoolean("PUB");
 				
 				notice = new Notice(
 						nid,
@@ -287,7 +359,8 @@ public class NoticeService {
 						regDate,
 						hit,
 						files,
-						content
+						content,
+						pub
 				);
 			}
 			
@@ -304,6 +377,44 @@ public class NoticeService {
 		}
 		
 		return notice;
+	}
+
+	public void deleteNoticeAll(int[] ids) {
+		int result = 0;
+		String params = "";
+		
+		for(int i = 0; i < ids.length; i++) {
+			params += ids[i];
+			
+			if( i < ids.length-1)
+				params += ",";
+		}
+		
+		String sql = "DELETE NOTICE WHERE ID IN ("+params+")";
+		
+		String url = "jdbc:mysql://localhost:3306/newlec?useSSL=false&serverTimezone=UTC";
+		String dbId = "root";
+		String dbPassword = "1234";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection(url, "root", "1234");
+			Statement st = con.createStatement();
+			
+			result = st.executeUpdate(sql);
+
+			
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

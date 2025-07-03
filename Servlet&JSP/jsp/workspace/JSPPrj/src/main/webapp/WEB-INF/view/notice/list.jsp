@@ -159,7 +159,7 @@
 						</select> 
 						<label class="hidden">검색어</label>
 						<input type="text" name="q" value="${param.q }"/>
-						<input class="btn btn-search" type="submit" value="검색" />
+						<input class="btn btn-search" type="	submit" value="검색" />
 					</fieldset>
 				</form>
 			</div>
@@ -186,7 +186,7 @@
 					
 					<tr>
 						<td>${n.id}</td>
-						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a></td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a><span>[${n.cmtCount}]</span></td>
 						<td>${n.writerId}</td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${n.regdate}"/></td>
 						<td>${n.hit}</td>
