@@ -20,16 +20,70 @@ public class NoticeService {
 		return 0;
 	}
 	
-	public int pubNoticeAll(int[] ids) {
+	public int pubNoticeAll(int[] oids, int[] cids) {
 		
-		return 0;
+		List<String> oidsList = new ArrayList<>();
+		for(int i=0; i<oids.length; i++)
+			oidsList.add(String.valueOf(oids[i]));
+		
+		List<String> cidsList = new ArrayList<>();
+		for(int i=0; i<cids.length; i++)
+			cidsList.add(String.valueOf(cids[i]));
+		
+		return pubNoticeAll(oidsList, cidsList);
+	}
+	
+	public int pubNoticeAll(List<String> oids, List<String> cids) {
+		String oidsCSVString = String.join(",", oids);
+		String cidsCSVString = String.join(",", cids);
+		
+		return pubNoticeAll(oidsCSVString, cidsCSVString);
+	}
+	
+	
+	// 
+	public int pubNoticeAll(String oidsCSV, String cidsCSV) {
+		
+		int result = 0;
+		
+		String sqlOpen = String.format("UPDATE NOTICE SET PUB=1 WHERE ID IN (%s)", oidsCSV);
+		String sqlClose = String.format("UPDATE NOTICE SET PUB=0 WHERE ID IN (%s)", cidsCSV);
+		
+		String url = "jdbc:mysql://localhost:3306/newlec?useSSL=false&serverTimezone=UTC";
+		String dbId = "root";
+		String dbPassword = "1234";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection(url, "root", "1234");
+			
+			Statement stOpen = con.createStatement();
+			result += stOpen.executeUpdate(sqlOpen);
+
+			Statement stClose = con.createStatement();
+			result += stClose.executeUpdate(sqlClose);
+
+			stOpen.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+		
+
 	}
 	
 	public int insertNotice(Notice notice) {
 		int result = 0;
 		
 		
-		String sql = "INSERT INTO NOTICE(TITLE, CONTENT, WRITER_ID, PUB) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO NOTICE(TITLE, CONTENT, WRITER_ID, PUB, FILES) VALUES (?, ?, ?, ?, ?)";
 		
 		String url = "jdbc:mysql://localhost:3306/newlec?useSSL=false&serverTimezone=UTC";
 		String dbId = "root";
@@ -44,6 +98,7 @@ public class NoticeService {
 			st.setString(2, notice.getContent());
 			st.setString(3, notice.getWriterId());
 			st.setBoolean(4, notice.getPub());
+			st.setString(5, notice.getFiles());
 			
 			result = st.executeUpdate();
 
@@ -58,7 +113,7 @@ public class NoticeService {
 			e.printStackTrace();
 		}
 		
-		return 0;
+		return result;
 	}
 	
 	public int deleteNotice(int id) {
@@ -77,6 +132,74 @@ public class NoticeService {
 	}
 	
 	
+	public List<NoticeView> getNoticePubList(String field, String query, int page) {
+		List<NoticeView> list = new ArrayList<>();
+		
+		String url = "jdbc:mysql://localhost:3306/newlec?useSSL=false&serverTimezone=UTC";
+		String dbId = "root";
+		String dbPassword = "1234";
+		
+		String sql =     
+				"SELECT * FROM ( " +
+			    "   SELECT ROW_NUMBER() OVER (ORDER BY regdate DESC) AS rownum, v.* " +
+			    "   FROM notice_view v " +
+			    "   WHERE " + field + " LIKE ? " +
+			    ") AS ranked " +
+			    "WHERE PUB = 1 AND rownum BETWEEN ? AND ?";
+		
+		try {
+			
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection(url, "root", "1234");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, "%" + query + "%");
+			st.setInt(2, 1+(page-1)*10);
+			st.setInt(3, page * 10);
+			ResultSet rs = st.executeQuery();
+
+			while(rs.next()) {
+				int id = rs.getInt("Id");
+				String title = rs.getString("TITLE");
+				Date regDate =rs.getDate("REGDATE");
+				String writerId =rs.getString("WRITER_ID");
+				String hit =rs.getString("HIT");
+				String files =rs.getString("FILES");
+				int cmtCount = rs.getInt("CMT_COUNT");
+				Boolean pub = rs.getBoolean("PUB");
+					
+				
+				NoticeView notice = new NoticeView(
+							id,
+							title,
+							writerId,
+							regDate,
+							hit,
+							files,
+							pub,
+							cmtCount
+				);
+				list.add(notice);
+			}
+			
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		return list;
+
+	}
 	
 	public List<NoticeView> getNoticeList(){
 		
@@ -416,5 +539,7 @@ public class NoticeService {
 		}
 		
 	}
+
+
 	
 }

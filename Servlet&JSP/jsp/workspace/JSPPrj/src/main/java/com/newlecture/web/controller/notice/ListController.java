@@ -42,7 +42,7 @@ public class ListController extends HttpServlet{
 		
 		List<NoticeView> list = new ArrayList<>();
 		int pageCount = noticeService.getNoticeCount();
-		list = noticeService.getNoticeList(field, query, page);
+		list = noticeService.getNoticePubList(field, query, page);
 		
 		request.setAttribute("list", list);
 		request.setAttribute("count", pageCount);
