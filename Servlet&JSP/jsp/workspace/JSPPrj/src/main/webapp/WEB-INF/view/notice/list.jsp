@@ -182,6 +182,8 @@
 					List<Notice> list = (List<Notice>)request.getAttribute("list");
 					for(Notice n : list) {	
 						pageContext.setAttribute("n", n); %> --%>
+
+					
 					<c:forEach var="n" items="${list}" varStatus="st">
 					
 					<tr>
